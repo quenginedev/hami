@@ -1,8 +1,10 @@
 import axios, { AxiosInstance } from 'axios'
 import { createOne } from './routes/create-one'
-import { findMany } from './routes/get-many'
+import { findMany } from './routes/find-many'
+import { findOne } from './routes/find-one'
+import { findById } from './routes/find-by-id'
 
-export type { FindManyType } from './routes/get-many'
+export type { FindManyType } from './routes/find-many'
 
 type CreateClientOptions<T> = { 
     endpoint: string,
@@ -25,6 +27,8 @@ export const createClient = <T>(option: CreateClientOptions<T>) => {
 const createOperations = <T, M extends keyof T>(ctx: Context<M>) => {
     return {
         createOne: createOne<T, M>(ctx),
-        findMany: findMany<T, M>(ctx)
+        findMany: findMany<T, M>(ctx),
+        findOne: findOne<T, M>(ctx),
+        findById: findById<T, M>(ctx),
     }
 }
