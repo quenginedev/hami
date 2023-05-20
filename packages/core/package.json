@@ -1,0 +1,26 @@
+{
+  "name": "@hami/core",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "tsup": {
+    "entry": [
+      "lib/index.ts"
+    ],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true,
+    "declaration": true
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.1",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "axios": "^1.4.0"
+  }
+}
