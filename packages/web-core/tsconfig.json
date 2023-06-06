@@ -6,7 +6,8 @@
       "declaration": true,
       "sourceMap": true,
       "types": [
-        "./types.d.ts"
+        "./types.d.ts",
+        "@types/node"
       ]
     },
     "include": ["lib/**/*"],

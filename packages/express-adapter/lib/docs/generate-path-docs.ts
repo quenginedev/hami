@@ -7,9 +7,9 @@ type GeneratePathDocs = {
     model: Model<any>
 }
 
-export const generatePathDocs = ({model, schema}: GeneratePathDocs) => {
+export const generatePathDocs = ({ model, schema }: GeneratePathDocs) => {
     const existingRecord = m2s(model);
-    const newRecord =  compose(
+    const newRecord = compose(
         dissocPath(['properties', '_id']),
         dissocPath(['properties', '__v']),
         dissocPath(['properties', 'createdAt']),
@@ -81,9 +81,9 @@ export const generatePathDocs = ({model, schema}: GeneratePathDocs) => {
         required: true,
         type: "string",
     }
-    return { 
+    return {
         //Many
-        [`/${schema.name}`] : {
+        [`/${schema.name}`]: {
             get: {
                 tags: [schema.name],
                 summary: `Get many ${schema.name}`,
@@ -107,8 +107,8 @@ export const generatePathDocs = ({model, schema}: GeneratePathDocs) => {
             },
             post: {
                 tags: [schema.name],
-                summary: `Create ${schema.name}`,
-                description: `Create ${schema.name}`,
+                summary: `Create many ${schema.name}`,
+                description: `Create many ${schema.name}`,
                 produces: ["application/json"],
                 requestBody: bodyMany,
                 responses: {
@@ -120,8 +120,8 @@ export const generatePathDocs = ({model, schema}: GeneratePathDocs) => {
             },
             put: {
                 tags: [schema.name],
-                summary: `Update ${schema.name}`,
-                description: `Update ${schema.name}`,
+                summary: `Update many ${schema.name}`,
+                description: `Update many ${schema.name}`,
                 produces: ["application/json"],
                 requestBody: bodyOne,
                 parameters: [
@@ -133,12 +133,12 @@ export const generatePathDocs = ({model, schema}: GeneratePathDocs) => {
                         schema: existingRecord,
                     },
                 },
-                
+
             },
             delete: {
                 tags: [schema.name],
-                summary: `Delete ${schema.name}`,
-                description: `Delete ${schema.name}`,
+                summary: `Delete many ${schema.name}`,
+                description: `Delete many ${schema.name}`,
                 produces: ["application/json"],
                 parameters: [
                     queryQuery,
@@ -155,8 +155,8 @@ export const generatePathDocs = ({model, schema}: GeneratePathDocs) => {
         [`/${schema.name}/one`]: {
             get: {
                 tags: [schema.name],
-                summary: `Get ${schema.name} by id`,
-                description: `Get ${schema.name} by id`,
+                summary: `Get ${schema.name}`,
+                description: `Get ${schema.name}`,
                 produces: ["application/json"],
                 parameters: [
                     queryQuery,
@@ -184,8 +184,8 @@ export const generatePathDocs = ({model, schema}: GeneratePathDocs) => {
             },
             put: {
                 tags: [schema.name],
-                summary: `Update ${schema.name} by id`,
-                description: `Update ${schema.name} by id`,
+                summary: `Update ${schema.name}`,
+                description: `Update ${schema.name}`,
                 produces: ["application/json"],
                 requestBody: bodyOne,
                 parameters: [
@@ -200,8 +200,8 @@ export const generatePathDocs = ({model, schema}: GeneratePathDocs) => {
             },
             delete: {
                 tags: [schema.name],
-                summary: `Delete ${schema.name} by id`,
-                description: `Delete ${schema.name} by id`,
+                summary: `Delete ${schema.name}`,
+                description: `Delete ${schema.name}`,
                 produces: ["application/json"],
                 parameters: [
                     queryQuery

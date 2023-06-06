@@ -1,26 +1,29 @@
-import { computed, onMounted, ref } from "vue";
-import { useUser, FetchAllUsersData, NewUser } from "./useUser";
+import { onMounted, ref, watchEffect } from "vue";
+import { useUser, FetchAllUsersData } from "./useUser";
+
+const resetNewUserData: User = {
+    address: {
+        city: '',
+        street: '',
+        zipCode: ''
+    },
+    email: '',
+    name: '',
+    phone: '',
+    username: ''
+}
 
 export const useApp = () => {
     const users = ref<FetchAllUsersData>([]);
     const loading = ref(false)
-    const resetNewUserData: NewUser = {
-        address: {
-            city: '',
-            street: '',
-            zipCode: ''
-        },
-        email: '',
-        name: '',
-        phone: '',
-        username: ''
-    }
+
     const newUser = ref({ ...resetNewUserData })
     const selectedUserId = ref<string | null>(null)
-    const selectedUser = computed(() => users.value?.find(user => user._id === selectedUserId.value))
     const {
-        actions: { fetchAllUsers, createUser },
+        actions: { fetchAllUsers, createUser, fetchUserById },
     } = useUser();
+
+    const selectedUser = ref<UserDoc | null>(null)
     const handleCreateUser = async () => {
         loading.value = true
         const { data } = await createUser(newUser.value)
@@ -35,7 +38,15 @@ export const useApp = () => {
         if (data) users.value = data;
         if (e) error.value = e;
     });
-    
+
+    watchEffect(async () => {
+        if (!selectedUserId.value) return selectedUser.value = null
+        loading.value = true
+        const { data: user } = await fetchUserById(selectedUserId.value as string)
+        loading.value = false
+        if (user) selectedUser.value = user
+    })
+
     return {
         state: {
             users,

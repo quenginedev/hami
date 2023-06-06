@@ -7,7 +7,6 @@ export const getRequestOptions = (req: Request) => {
     // TODO: there shoul be a cleaner way to make this ok
     const query: FilterQuery<any> = toJson(req.query.query)
     const options: QueryOptions = toJson(req.query.options)
-    console.log('query', query)
     const param = req.params
     const data = req.body
     let { 

@@ -31,8 +31,18 @@ const postSchema = {
     })
 }
 
+const chrisSchema = {
+    name: 'chris',
+    fields: Schema({
+        money: String,
+        game: String,
+        talent: String
+    })
+}
+
 export const schema: Schema[] = [
     userSchema,
     postSchema,
     albumSchema,
+    chrisSchema
 ]

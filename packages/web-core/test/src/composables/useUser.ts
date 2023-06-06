@@ -1,24 +1,34 @@
-import { useHami, ModelType, ModelDoc } from "./useHami"
+import { useHami } from "./useHami";
 
-const client = useHami()
+const client = useHami();
 
-export type NewUser = ModelType<'user'>
-export type User = ModelDoc<NewUser>
+export type FetchAllUsersData = Awaited<
+    ReturnType<typeof client.user.findMany>
+>["data"];
+export type CreateNewUserData = Awaited<
+    ReturnType<typeof client.user.createOne>
+>["data"];
 
-const fetchAllUsers = () => client.user.findMany({query: {}})
-export type FetchAllUsersData = Awaited<ReturnType<typeof fetchAllUsers>>['data']
+export const useUser = () => {
+    const fetchAllUsers = () => client.user.findMany({ query: {} });
+    const fetchUserById = (_id: string) =>
+        client.user.findById({ param: { _id } });
+    const createUser = (newUser: User) =>
+        client.user.createOne({
+            body: newUser,
+        });
+    const updateUserById = (_id: string, body: Partial<User>) =>
+        client.user.updateById({
+            param: { _id },
+            body,
+        });
 
-const createUser = (newUser: NewUser) => client.user.createOne({
-    body: newUser
-})
-export type CreateNewUserData = Awaited<ReturnType<typeof createUser>>['data']
-
-
-export const useUser = () => {    
     return {
         actions: {
             fetchAllUsers,
-            createUser
-        }
-    }
-}
+            fetchUserById,
+            createUser,
+            updateUserById,
+        },
+    };
+};

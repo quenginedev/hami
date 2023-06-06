@@ -3,8 +3,8 @@ import { handleRequest } from "../utils/handle-request"
 
 type Options<T> = { body: T }
 
-export const createOne = <T, M extends keyof T>(context: Context<M>) => async (options: Options<T[M]>) => {
+export const createOne = <S, M extends keyof S = keyof S>(context: Context<M>) => async (options: Options<S[M]>) => {
     const { http, model } = context
     const { body } = options
-    return handleRequest<ModelDoc<T[M]>>(http.post(`/${String(model)}/one`, body))
+    return handleRequest<ModelDoc<S[M]>>(http.post(`/${String(model)}/one`, body))
 }

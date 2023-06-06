@@ -11,14 +11,11 @@ import { deleteById } from "./delete-by-id"
 import { updateById } from "./update-by-id"
 import { updateMany } from "./update-many"
 import { updateOne } from "./update-one"
+import { Compiled } from ".."
 
-type Context = {
-    app: Application
-}
-
-type RouteConfig = {
-    schema: Schema,
-    model: Model<any>
+type Params = {
+    app: Application,
+    compiled: Compiled
 }
 
 const routerRouteGeneratingList = [
@@ -31,15 +28,16 @@ const routerRouteGeneratingList = [
     findMany,
     findOne,
     updateById,
-    updateOne,   
+    updateOne,
     updateMany,
 ]
 
-export const createRoutes = (ctx: Context) => (cfg: RouteConfig) => {
-    const { schema, model } = cfg
-    const { app } = ctx
-    const router = Router()
-    const rtCtx = { model, router }
-    routerRouteGeneratingList.forEach(r => r(rtCtx))
-    app.use(`/${schema.name.toLowerCase()}`, router)
+export const createRoutes = ({ app, compiled }: Params) => {
+    compiled.forEach(cfg => {
+        const { schema, model } = cfg
+        const router = Router()
+        const rtCtx = { model, router }
+        routerRouteGeneratingList.forEach(r => r(rtCtx))
+        app.use(`/${schema.name.toLowerCase()}`, router)
+    })
 }
