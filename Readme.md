@@ -140,4 +140,8 @@ Remember, the provided examples are basic and your actual schemas might need to 
 
 # Contributing
 
-Hami is an open-source project, and contributions from the community are highly appreciated. If you would like to contribute to the development of Hami,
+We warmly welcome you to Hami! Here, the developer experience is paramount, and we cherish every contribution that enhances it. Be it a new adapter, an improved client, or simply sprucing up the documentation - all efforts count.
+
+Are you new? Don't worry! Open an issue or discussion on our GitHub repository. We're more than happy to guide you.
+
+Let's make Hami the best it can be, together. Your contribution can fuel an amazing developer experience, and we can't wait to see what we'll create. Thank you!
