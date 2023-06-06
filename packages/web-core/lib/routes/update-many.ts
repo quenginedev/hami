@@ -7,13 +7,13 @@ type Options<T> = {
     body: Partial<T>
 }
 
-export type UpdateByIdType<T> = ModelDoc<T> | null
+export type UpdateManyType<T> = Array<ModelDoc<T>>
 
-export const updateById = <S, M extends keyof S>(context: Context<M>) => async (options: Options<S[M]>) => {
+export const updateMany = <S, M extends keyof S>(context: Context<M>) => async (options: Options<S[M]>) => {
     const { http, model } = context
     const { query, body } = options
-    return handleRequest<UpdateByIdType<S[M]>>(http.request({
-        url: `/${String(model)}/one`,
+    return handleRequest<UpdateManyType<S[M]>>(http.request({
+        url: `/${String(model)}`,
         method: 'PUT',
         params: { query },
         data: body

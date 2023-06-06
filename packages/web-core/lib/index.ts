@@ -1,5 +1,7 @@
+import axios from 'axios'
+import { updateMany } from './routes/update-many';
+import { updateOne } from './routes/update-one';
 import { updateById } from './routes/upadte-by-id';
-import axios, { AxiosInstance } from 'axios'
 import { createOne } from './routes/create-one'
 import { findMany } from './routes/find-many'
 import { findOne } from './routes/find-one'
@@ -32,6 +34,8 @@ const createOperations = <S, M extends keyof S>(ctx: Context<M>) => {
         findById: findById<S, M>(ctx),
         findMany: findMany<S, M>(ctx),
         findOne: findOne<S, M>(ctx),
-        updateById: updateById<S, M>(ctx)
+        updateById: updateById<S, M>(ctx),
+        updateMany: updateMany<S, M>(ctx),
+        updateOne: updateOne<S, M>(ctx),
     }
 }
