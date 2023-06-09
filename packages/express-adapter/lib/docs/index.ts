@@ -59,9 +59,9 @@ export const createDocs = ({ app, compiled }: Context) => {
     }))
     app.use('/ts-types', (_, res) => {
         const { schema, types } = compiled.reduce((acc, c) => {
-            const { schema: { fields, name } } = c
+            const { schema: { props, name }, ast } = c
             const modelName = capitalize(name)
-            acc.types += '\n\n' + generateTypeScriptDefinitions(fields.obj, modelName)
+            acc.types += '\n\n' + generateTypeScriptDefinitions(props.obj, modelName)
             acc.types += `\ntype ${modelName}Doc = ${modelName} & DocType`
             acc.schema += `\n  ${name}: ${modelName}`
             return acc

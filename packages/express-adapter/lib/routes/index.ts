@@ -34,9 +34,9 @@ const routerRouteGeneratingList = [
 
 export const createRoutes = ({ app, compiled }: Params) => {
     compiled.forEach(cfg => {
-        const { schema, model } = cfg
+        const { schema, model, ast } = cfg
         const router = Router()
-        const rtCtx = { model, router }
+        const rtCtx = { model, router, ast }
         routerRouteGeneratingList.forEach(r => r(rtCtx))
         app.use(`/${schema.name.toLowerCase()}`, router)
     })

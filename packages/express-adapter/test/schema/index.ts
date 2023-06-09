@@ -1,7 +1,8 @@
-import { Schema, ID } from '../../lib'
+import { Props, ID } from '../../lib'
+
 const userSchema = {
     name: 'user',
-    fields: Schema({
+    props: Props({
         name: String,
         username: String,
         email: String,
@@ -16,7 +17,7 @@ const userSchema = {
 
 const albumSchema = {
     name: 'album',
-    fields: Schema({
+    props: Props({
         user: { type: ID, ref: 'user' },
         title: String
     })
@@ -24,7 +25,7 @@ const albumSchema = {
 
 const postSchema = {
     name: 'post',
-    fields: Schema({
+    props: Props({
         user: { type: ID, ref: 'user' },
         title: String,
         body: String
@@ -33,7 +34,7 @@ const postSchema = {
 
 const chrisSchema = {
     name: 'chris',
-    fields: Schema({
+    props: Props({
         money: String,
         game: String,
         talent: String

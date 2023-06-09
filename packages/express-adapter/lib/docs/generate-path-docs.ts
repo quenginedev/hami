@@ -1,13 +1,9 @@
 import { Model } from "mongoose";
 import m2s from "mongoose-to-swagger";
 import { compose, dissocPath } from "ramda";
+import { Compiled } from "..";
 
-type GeneratePathDocs = {
-    schema: Schema,
-    model: Model<any>
-}
-
-export const generatePathDocs = ({ model, schema }: GeneratePathDocs) => {
+export const generatePathDocs = ({ model, schema }: Compiled[0]) => {
     const existingRecord = m2s(model);
     const newRecord = compose(
         dissocPath(['properties', '_id']),

@@ -4,24 +4,29 @@ import { createRoutes } from './routes'
 import { createDocs } from './docs'
 import bodyParser from 'body-parser'
 import mongoose, { type Model } from 'mongoose'
+import { schemaToAST } from './utils/schema2Ast'
+import { createTypes } from './types'
 
 export type Compiled = Array<{
     schema: Schema,
     model: Model<any>
+    ast: ReturnType<typeof schemaToAST>
 }>
 
 export const createHami = (app: Application) => (schema: Schema[]) => {
     app.use(bodyParser.json())
     const compiled = schema.map(s => {
         const model = createSchemaModel(s)
-        return { schema: s, model }
+        const ast = schemaToAST(model)
+        return { schema: s, model, ast }
     })
     createRoutes({app, compiled})
     createDocs({ app, compiled})
+    createTypes({ app, compiled })
     return app
 }
 
-export const Schema = (props: mongoose.SchemaDefinition) => new mongoose.Schema(props, {
+export const Props = (props: mongoose.SchemaDefinition) => new mongoose.Schema(props, {
     timestamps: true
 })
 
