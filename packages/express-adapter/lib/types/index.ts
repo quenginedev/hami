@@ -10,61 +10,66 @@ export const useMongooseTypes = () => ({
     Array,
     Buffer,
 })
-const tsTypes = {
-    String: 'string',
-    Number: 'number',
-    Boolean: 'boolean',
+
+const mongooseType = {
+    ObjectId: 'ObjectId',
+    String: 'String',
+    Number: 'Number',
+    Boolean: 'Boolean',
     Date: 'Date',
-    Object: 'object',
-    Buffer: 'buffer'
+    Object: 'Object',
+    Buffer: 'Buffer',
+    Array: 'Array'
+}
+
+const tsTypes = {
+    [mongooseType.ObjectId]: 'string',
+    [mongooseType.String]: 'string',
+    [mongooseType.Number]: 'number',
+    [mongooseType.Boolean]: 'boolean',
+    [mongooseType.Date]: 'Date',
+    [mongooseType.Object]: 'object',
+    [mongooseType.Buffer]: 'buffer',
 }
 export const getTsTypes = prop => tsTypes[prop]
 export const capitalize = (ref) => ref.charAt(0).toUpperCase() + ref.slice(1)
 
 
-const generateTypeScriptDefinitions = (schemaData, modelName, tab = 0) => {
-    const isNested = modelName !== 'NestedType'
-    let tsDefinitions = isNested ? `type ${modelName} = {\n` : '{\n'
-    const tb = Array.from({ length: tab }, () => '\t')
-    for (const key in schemaData) {
-        if (schemaData.hasOwnProperty(key)) {
-            const type = getTypeScriptType(schemaData[key], tab)
-            tsDefinitions += `${tb}  ${key}: ${type}\n`
+const generateTypeScriptDefinitions = (ast: AST, tab = 1) => {
+    const typeName = ast.type
+    const props = ast.properties
+    const isNested = Object.keys(tsTypes).includes(typeName)
+    let tsDefinitions = isNested ? '{\n' : `type ${typeName} = {\n`
+    const tb = Array.from({ length: tab }).fill('\t').join('')
+    for (const key in props) {
+        const prop = props[key]
+        if (prop.type === mongooseType.ObjectId) {
+            tsDefinitions += `${tb}${key}: ${capitalize(prop.ref)} | string\n`
+        } else if (prop.type === mongooseType.Array) {
+            tsDefinitions += `${tb}${key}: ${getType(prop.items[0].type)}[]\n`
+        } else if (prop.type === mongooseType.Object) {
+            tsDefinitions += `${tb}${key}: ${generateTypeScriptDefinitions(prop, tab + 1)}`
+        } else {
+            tsDefinitions += `${tb}${key}: ${getType(prop.type)}\n`
         }
     }
-    tsDefinitions += `${tb}} \n`
 
-
+    tsDefinitions += `${Array.from({ length: tab - 1 }).fill('\t').join('')}}\n`
     return tsDefinitions
 }
 
-const getTypeScriptType = (field, tab) => {
-    if (typeof field === 'function') {
-        return getTsTypes(field.name)
-    }
-    if (typeof field === 'object' && field !== null) {
-        if (Array.isArray(field)) {
-            const arrayType = getTypeScriptType(field[0], tab)
-            return `${arrayType}[]`
-        }
-        if (field.ref) {
-            return capitalize(field.ref)
-        }
-        else {
-            return generateTypeScriptDefinitions(field, 'NestedType', tab + 1)
-        }
-    }
-    return 'any'
+const getType = (type: string) => {
+    return tsTypes[type] || 'unknown'
 }
 
-export const createTypes = ({ app, compiled }: Context) => {
+export const createTypesGenRoute = ({ app, compiled }: Context) => {
     app.use('/ts-types', (_, res) => {
         const { schema, types } = compiled.reduce((acc, c) => {
-            const { schema: { props, name }, ast } = c
-            const modelName = capitalize(name)
-            acc.types += '\n\n' + generateTypeScriptDefinitions(props.obj, modelName)
-            acc.types += `\ntype ${modelName}Doc = ${modelName} & DocType`
-            acc.schema += `\n  ${name}: ${modelName}`
+            const { schema: { name }, ast } = c
+            const typeName = ast.type
+            acc.types += '\n\n' + generateTypeScriptDefinitions(ast)
+            acc.types += `\ntype ${typeName}Doc = ${typeName} & DocType`
+            acc.schema += `\n  ${name}: ${typeName}`
             return acc
         }, {
             types: 'type DocType = { _id: string, createdAt: Date, updatedAt: Date }',

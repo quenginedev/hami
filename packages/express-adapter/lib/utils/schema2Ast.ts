@@ -1,9 +1,10 @@
 import type { Model } from 'mongoose'
+import { capitalize } from '../types';
 
-export function schemaToAST<T>(model: Model<T>) {
+export function schemaToAST<T>(model: Model<T>): AST {
     const { schema, modelName } = model;
     const ast = {
-        type: modelName,
+        type: capitalize(modelName),
         properties: {},
     };
 
@@ -14,7 +15,7 @@ export function schemaToAST<T>(model: Model<T>) {
     return ast;
 }
 
-function getType(obj) {
+function getType(obj): AST {
     if (Array.isArray(obj)) {
         return {
             type: 'Array',
@@ -51,6 +52,6 @@ function getType(obj) {
 }
 
 function getTypeName(func) {
-    const match = func.toString().match(/function (\w*)/);
-    return match ? match[1] : '';
+    const match = func.toString().match(/(function|class) (\w*)/);
+    return match ? match[2] : '';
 }

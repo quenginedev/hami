@@ -9,11 +9,8 @@ type Options<T> = {
 
 export type FindManyType<T> = Array<ModelDoc<T>>;
 
-export const findMany = <
-	S,
-	M extends keyof S = keyof S
->(context: Context<M>) =>
-	async <T = S[M]>(options: Options<S[M]> = {}) => {
+export const findMany = <S, M extends keyof S = keyof S>(context: Context<M>) =>
+	async <T = S[M]>(options: Options<T> = {}) => {
 		const { http, model } = context;
 		const { query, limit, sort } = options;
 

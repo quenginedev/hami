@@ -9,11 +9,21 @@ type CreateRouteContext<T> = {
     model: import('mongoose').Model<T>
 }
 
+type AST = {
+    type: 'String' | 'Number' | 'ObjectId' | 'Object' | 'Array' | 'Date' | string,
+    items?: Array<AST>
+    properties?: { [key: string]: AST }
+    default?: any,
+    required?: boolean,
+    unique?: boolean,
+    ref?: string,
+}
+
 type Context = {
     app: Application,
     compiled: Array<{
         schema: Schema,
         model: Model<any>
-        ast: ReturnType<typeof import('./lib/utils/schema2Ast')['schemaToAST']>
+        ast: AST
     }>,
 }

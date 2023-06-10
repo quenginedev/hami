@@ -1,5 +1,5 @@
 import { onMounted, ref, watchEffect } from "vue";
-import { useUser, FetchAllUsersData } from "./useUser";
+import { useUser } from "./useUser";
 
 const resetNewUserData: User = {
     address: {
@@ -14,7 +14,7 @@ const resetNewUserData: User = {
 }
 
 export const useApp = () => {
-    const users = ref<FetchAllUsersData>([]);
+    const users = ref<UserDoc[]>([]);
     const loading = ref(false)
 
     const newUser = ref({ ...resetNewUserData })
