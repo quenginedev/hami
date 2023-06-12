@@ -3,6 +3,7 @@ import { useHami } from "./useHami";
 const client = useHami();
 
 export const useUser = () => {
+
     const fetchAllUsers = () => client.user.findMany({ query: {} });
     const fetchUserById = (_id: string) =>
         client.user.findById({ param: { _id } });

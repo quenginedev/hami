@@ -13,14 +13,17 @@ export type Compiled = Array<{
     ast: ReturnType<typeof schemaToAST>
 }>
 
-export const createHami = (app: Application) => (schema: Schema[]) => {
+export const createHami = (app: Application) => (schema: Schema[], options: {
+    plugins?: Array<HamiPlugin>
+} = {}) => {
     app.use(bodyParser.json())
     const compiled = schema.map(s => {
         const model = createSchemaModel(s)
         const ast = schemaToAST(model)
         return { schema: s, model, ast }
     })
-    createRoutes({ app, compiled })
+    const { plugins = [] } = options
+    createRoutes({ app, compiled, plugins })
     createDocs({ app, compiled })
     createTypesGenRoute({ app, compiled })
     return app
