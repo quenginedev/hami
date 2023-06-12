@@ -15,7 +15,8 @@ import { Compiled } from ".."
 
 type Params = {
     app: Application,
-    compiled: Compiled
+    compiled: Compiled,
+    plugins: Array<HamiPlugin>
 }
 
 const routerRouteGeneratingList = [
@@ -32,11 +33,11 @@ const routerRouteGeneratingList = [
     updateMany,
 ]
 
-export const createRoutes = ({ app, compiled }: Params) => {
+export const createRoutes = ({ app, compiled, plugins }: Params) => {
     compiled.forEach(cfg => {
         const { schema, model, ast } = cfg
         const router = Router()
-        const rtCtx = { model, router, ast }
+        const rtCtx = { model, router, ast, plugins }
         routerRouteGeneratingList.forEach(r => r(rtCtx))
         app.use(`/${schema.name.toLowerCase()}`, router)
     })

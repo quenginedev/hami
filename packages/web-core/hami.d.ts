@@ -1,40 +1,39 @@
 type DocType = { _id: string, createdAt: Date, updatedAt: Date }
 
 type User = {
-  name: string
-  username: string
-  email: string
-  address: {
-	  street: string
-	  city: string
-	  zipCode: string
-	} 
-
-  phone: string
-} 
+	name: string
+	username: string
+	email: string
+	address: {
+		street: string
+		city: string
+		zipCode: string
+	}
+	phone: string
+}
 
 type UserDoc = User & DocType
 
 type Post = {
-  user: User
-  title: string
-  body: string
-} 
+	user: User | string
+	title: string
+	body: string
+}
 
 type PostDoc = Post & DocType
 
 type Album = {
-  user: User
-  title: string
-} 
+	user: User | string
+	title: string
+}
 
 type AlbumDoc = Album & DocType
 
 type Chris = {
-  money: string
-  game: string
-  talent: string
-} 
+	money: string
+	game: Date
+	talent: string[]
+}
 
 type ChrisDoc = Chris & DocType
 

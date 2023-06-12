@@ -36,8 +36,8 @@ const chrisSchema = {
     name: 'chris',
     props: Props({
         money: String,
-        game: String,
-        talent: String
+        game: Date,
+        talent: [String]
     })
 }
 
